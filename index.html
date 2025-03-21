@@ -1,17 +1,24 @@
+<!DOCTYPE html>
 <html lang="en">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Reflection</title>
+        <title>Image to Video</title>
+        <link rel="stylesheet" href="css/index.css">
     </head>
     <body>
-        <button id="startButton">Start</button>
-        <div style="position: relative; display: inline-block;">
-            <img id="cameraSource" src="stream.mjpg" style="display: none;">
-            <canvas id="canvasOutput" style="position: absolute; top: 0; left: 0;"></canvas>
+        <h2>Image to Video Generator</h2>
+
+        <input type="file" id="imageInput" accept="image/*"><br><br>
+
+        <div id="video-container">
+            <img id="preview" style="display:none;">
+            <video id="video-result" ></video>
         </div>
 
-        <script src="index.js" type="text/JavaScript"></script>
-        <script async src="opencv.js" onload="openCvReady();"></script>
+        <button id="generateBtn">Generate Video</button>
+
+        <script src="js/index.js"></script>
     </body>
 </html>
+

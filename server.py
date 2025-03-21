@@ -4,10 +4,33 @@ import socketserver
 from http import server
 from threading import Condition
 import os
+from rembg import remove
+from PIL import Image, ImageFilter
+from io import BytesIO
+import numpy as np
 
 from picamera2 import Picamera2
 from picamera2.encoders import JpegEncoder
 from picamera2.outputs import FileOutput
+
+def refine_edges(image_with_alpha):
+    alpha_channel = np.array(image_with_alpha.convert("RGBA"))[:, :, 3]
+    alpha_channel = Image.fromarray(alpha_channel).filter(ImageFilter.GaussianBlur(2))
+    image_with_alpha.putalpha(alpha_channel)
+
+    return image_with_alpha
+def add_black_background(input_image):
+    image_with_alpha = input_image.convert("RGBA")
+    black_background = Image.new("RGBA", image_with_alpha.size, (0, 0, 0, 255))
+    black_background.paste(image_with_alpha, (0, 0), mask=image_with_alpha)
+
+    return black_background
+def remove_background(file_path):
+    input_image = Image.open(file_path)
+    output_image = remove(input_image)
+    refined_image = refine_edges(output_image)
+    black_background = add_black_background(refined_image)
+    black_background.save("image/output.png", format="PNG")
 
 class StreamingOutput(io.BufferedIOBase):
     def __init__(self):
@@ -48,6 +71,16 @@ class StreamingHandler(server.BaseHTTPRequestHandler):
                 logging.warning(
                     'Removed streaming client %s: %s',
                     self.client_address, str(e))
+
+        elif self.path == '/get_child_img':
+            self.send_response(200)
+            self.send_header('Content-type', 'image/jpeg')
+            self.end_headers()
+
+            img_filename = 'assets/image/input.jpg'
+            with open(img_filename, 'rb') as img_file:
+                self.wfile.write(img_file.read())
+            
         else:
             file_path = '.' + self.path
             if os.path.isfile(file_path):
