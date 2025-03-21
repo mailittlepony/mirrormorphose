@@ -1,0 +1,17 @@
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Reflection</title>
+    </head>
+    <body>
+        <button id="startButton">Start</button>
+        <div style="position: relative; display: inline-block;">
+            <img id="cameraSource" src="stream.mjpg" style="display: none;">
+            <canvas id="canvasOutput" style="position: absolute; top: 0; left: 0;"></canvas>
+        </div>
+
+        <script src="index.js" type="text/JavaScript"></script>
+        <script async src="opencv.js" onload="openCvReady();"></script>
+    </body>
+</html>
