@@ -1,10 +1,11 @@
 import io
 import logging
+import subprocess
 import socketserver
 from http import server
 from threading import Condition
 import os
-from rembg import remove
+import backgroundremover
 from PIL import Image, ImageFilter
 from io import BytesIO
 import numpy as np
@@ -19,18 +20,25 @@ def refine_edges(image_with_alpha):
     image_with_alpha.putalpha(alpha_channel)
 
     return image_with_alpha
+
 def add_black_background(input_image):
     image_with_alpha = input_image.convert("RGBA")
     black_background = Image.new("RGBA", image_with_alpha.size, (0, 0, 0, 255))
     black_background.paste(image_with_alpha, (0, 0), mask=image_with_alpha)
 
     return black_background
-def remove_background(file_path):
-    input_image = Image.open(file_path)
-    output_image = remove(input_image)
-    refined_image = refine_edges(output_image)
+
+def remove_background(input_path, output_path):
+    cmd = [
+        "backgroundremover", "-i", input_path, "-o", output_path, "--alpha-matting"
+    ]
+
+    subprocess.run(cmd, check=True)
+
+    image = Image.open(output_path)
+    refined_image = refine_edges(image)
     black_background = add_black_background(refined_image)
-    black_background.save("image/output.png", format="PNG")
+    black_background.save(output_path, format="PNG")
 
 class StreamingOutput(io.BufferedIOBase):
     def __init__(self):
@@ -77,9 +85,12 @@ class StreamingHandler(server.BaseHTTPRequestHandler):
             self.send_header('Content-type', 'image/jpeg')
             self.end_headers()
 
-            img_filename = 'assets/image/input.jpg'
+            img_filename = 'assets/image/output.png'
+            print("removing background...")
+            remove_background("assets/image/input.jpg", img_filename)
             with open(img_filename, 'rb') as img_file:
                 self.wfile.write(img_file.read())
+            print("background removed")
             
         else:
             file_path = '.' + self.path
