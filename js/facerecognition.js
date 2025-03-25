@@ -1,14 +1,15 @@
-const imageSource = document.getElementById('cameraSource');
-const canvasOutput = document.getElementById('canvasOutput');
-const ctx = canvasOutput.getContext('2d');
-const startButton = document.getElementById('startButton');
+const cameraSource = document.createElement('img');
 
 let faceClassifier = null;
 let eyeClassifier = null;
 let faceCascadeFile = 'haarcascade_frontalface_default.xml';
 let eyeCascadeFile = 'haarcascade_eye.xml';
-
 let streaming = false;
+
+let onHeadDetected = null;
+let onHeadPositionChange = null;
+let onEyeStateChange = null;
+let onHeadNotDetected = null;
 
 function createFileFromUrl(path, url, callback) {
     fetch(url)
@@ -35,10 +36,10 @@ function openCvReady() {
         faceClassifier = new cv.CascadeClassifier();
         eyeClassifier = new cv.CascadeClassifier();
 
-        createFileFromUrl(faceCascadeFile, faceCascadeFile, () => {
+        createFileFromUrl(faceCascadeFile, "models/" + faceCascadeFile, () => {
             faceClassifier.load(faceCascadeFile);
         });
-        createFileFromUrl(eyeCascadeFile, eyeCascadeFile, () => {
+        createFileFromUrl(eyeCascadeFile, "models/" + eyeCascadeFile, () => {
             eyeClassifier.load(eyeCascadeFile);
         });
     };
@@ -54,36 +55,108 @@ function processImage(img) {
     let msize = new cv.Size(0, 0);
     faceClassifier.detectMultiScale(gray, faces, 1.1, 3, 0, msize, msize);
 
-    // detect faces
-    for (let i = 0; i < faces.size(); ++i) {
-        let roiGray = gray.roi(faces.get(i));
-        let roiSrc = src.roi(faces.get(i));
-        let point1 = new cv.Point(faces.get(i).x, faces.get(i).y);
-        let point2 = new cv.Point(faces.get(i).x + faces.get(i).width, faces.get(i).y + faces.get(i).height);
-        cv.rectangle(src, point1, point2, [255, 0, 0, 255]);
+    let maxFace = null;
+    let maxFaceArea = 0;
 
-        // detect eyes in face ROI
-        eyeClassifier.detectMultiScale(roiGray, eyes);
-        for (let j = 0; j < eyes.size(); ++j) {
-            let point1 = new cv.Point(eyes.get(j).x, eyes.get(j).y);
-            let point2 = new cv.Point(eyes.get(j).x + eyes.get(j).width,
-                eyes.get(j).y + eyes.get(j).height);
-            cv.rectangle(roiSrc, point1, point2, [0, 0, 255, 255]);
+    // Step 1: Find the largest face based on area
+    for (let i = 0; i < faces.size(); ++i) {
+        let face = faces.get(i);
+        let faceArea = face.width * face.height; // Area of the face
+
+        if (faceArea > maxFaceArea) {
+            maxFaceArea = faceArea;
+            maxFace = face; // Keep the largest face
         }
-        roiGray.delete(); roiSrc.delete();
     }
 
-    cv.imshow(canvasOutput, src);
+    // Step 2: If a face was detected
+    if (maxFace) {
+        let centerX = maxFace.x + maxFace.width / 2;
+        let centerY = maxFace.y + maxFace.height / 2;
+
+        if (onHeadDetected && !this.prevHeadState) {
+            onHeadDetected(centerX, centerY);
+        }
+        this.prevHeadState = true;
+
+        // Check if the head position has changed significantly
+        if (this.prevHeadCenterX !== undefined && this.prevHeadCenterY !== undefined) {
+            let headMoveThreshold = 20; // Change threshold (you can adjust this)
+            let dx = Math.abs(centerX - this.prevHeadCenterX);
+            let dy = Math.abs(centerY - this.prevHeadCenterY);
+
+            if (dx > headMoveThreshold || dy > headMoveThreshold) {
+                // Call onHeadPositionChange callback when the head position changes
+                if (onHeadPositionChange) {
+                    onHeadPositionChange(centerX, centerY);
+                }
+            }
+        }
+
+        // Store current head position for future comparisons
+        this.prevHeadCenterX = centerX;
+        this.prevHeadCenterY = centerY;
+
+        let roiGray = gray.roi(maxFace); // Region of interest in gray scale
+        let roiSrc = src.roi(maxFace);   // Region of interest in original image
+
+        eyeClassifier.detectMultiScale(roiGray, eyes);
+
+        // Filter eyes based on aspect ratio relative to the face's bounding box
+        let validEyes = [];
+        for (let i = 0; i < eyes.size(); ++i) {
+            let eye = eyes.get(i);
+            // Calculate the aspect ratio of the eye compared to the face's width and height
+            let aspectRatio = eye.width / eye.height;
+            let eyeToFaceWidthRatio = eye.width / maxFace.width;
+            let eyeToFaceHeightRatio = eye.height / maxFace.height;
+
+            // Apply the aspect ratio threshold (adjust this threshold as necessary)
+            let aspectRatioThreshold = 0.2; // Adjust based on your requirements
+            let sizeThreshold = 0.05; // Threshold for minimum size relative to the face
+
+            if (aspectRatio > aspectRatioThreshold &&
+                eyeToFaceWidthRatio > sizeThreshold && 
+                eyeToFaceHeightRatio > sizeThreshold) {
+                validEyes.push(eye);
+            }
+        }
+
+        // Determine eyeState based on the number of valid eyes
+        let eyeState;
+        if (validEyes.length < 2) {
+            eyeState = "closed";
+        } else if (validEyes.length === 2) {
+            eyeState = "open";
+        }
+
+        // Call the onEyeStateChange callback when the eye state changes
+        if (this.prevEyeState !== undefined && this.prevEyeState !== eyeState) {
+            if (onEyeStateChange) {
+                onEyeStateChange(eyeState);
+            }
+        }
+
+        // Store the current eye state for future comparison
+        this.prevEyeState = eyeState;
+
+        roiGray.delete();
+        roiSrc.delete();
+    } else {
+        if (onHeadNotDetected && this.prevHeadState) {
+            onHeadNotDetected();
+        }
+        this.prevHeadState = false;
+    }
+
+    // Store that no head is detected in the current frame
+    this.prevHeadCenterX = undefined;
+    this.prevHeadCenterY = undefined;
 
     src.delete();
-    gray.delete(); 
-    faces.delete(); 
+    gray.delete();
+    faces.delete();
     eyes.delete();
-}
-
-function clean() {
-    faceClassifier.delete();
-    eyeClassifier.delete(); 
 }
 
 function processFrame() {
@@ -93,17 +166,18 @@ function processFrame() {
     requestAnimationFrame(processFrame);
 }
 
-cameraSource.addEventListener('load', function() {
-    processFrame();
-});
+function startDetection() {
+    cameraSource.src = "stream.mjpg";
+    cameraSource.style.display = "none";
+    cameraSource.addEventListener('load', function() {
+        processFrame();
+    });
+    document.body.appendChild(cameraSource);
 
-startButton.addEventListener("click", function() {
-    if (this.innerHTML === "Start") {
-        this.innerHTML = "Stop";
-        streaming = true;
-    } else if (this.innerHTML === "Stop") {
-        this.innerHTML = "Start";
-        streaming = false;
-    }
-});
+    streaming = true;
+}
+
+function stopDetection() {
+    streaming = false;
+}
 
