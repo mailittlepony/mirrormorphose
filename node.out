@@ -1,0 +1,54 @@
+Server running on port 8001
+Image uploaded and saved at: /home/mailitg/Documents/mirrormorphose/assets/image/input.jpg
+Fetched Image Size (in bytes): 625602
+Base64 String Length: 834136
+Data URI (first 100 chars): data:image/jpeg;base64,iVBORw0KGgoAAAANSUhEUgAABDQAAARkCAYAAACNYESNAAEAAElEQVR4nOz90ZLkyJUsCKqeYwb3i...
+Full task response: {
+  "id": "e076dae5-188b-4f72-b232-bc21d08f73b5",
+  "status": "SUCCEEDED",
+  "createdAt": "2025-03-26T19:17:09.521Z",
+  "output": [
+    "https://dnznrvs05pmza.cloudfront.net/ae9fa481-2aa1-4476-a3a7-853aa887c537.mp4?_jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrZXlIYXNoIjoiOGJiZDdhZWI1MjM3ZWNlNyIsImJ1Y2tldCI6InJ1bndheS10YXNrLWFydGlmYWN0cyIsInN0YWdlIjoicHJvZCIsImV4cCI6MTc0MzEyMDAwMH0.5QR7cI5zo-1_7-TOH-8PhgkdqI7WP2xGPu7A7YsVd1U"
+  ]
+}
+Generated video URL: https://dnznrvs05pmza.cloudfront.net/ae9fa481-2aa1-4476-a3a7-853aa887c537.mp4?_jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrZXlIYXNoIjoiOGJiZDdhZWI1MjM3ZWNlNyIsImJ1Y2tldCI6InJ1bndheS10YXNrLWFydGlmYWN0cyIsInN0YWdlIjoicHJvZCIsImV4cCI6MTc0MzEyMDAwMH0.5QR7cI5zo-1_7-TOH-8PhgkdqI7WP2xGPu7A7YsVd1U
+Image uploaded and saved at: /home/mailitg/Documents/mirrormorphose/assets/image/input.jpg
+Image uploaded and saved at: /home/mailitg/Documents/mirrormorphose/assets/image/input.jpg
+Fetched Image Size (in bytes): 909079
+Base64 String Length: 1212108
+Data URI (first 100 chars): data:image/jpeg;base64,iVBORw0KGgoAAAANSUhEUgAAA5gAAAZACAYAAAAcne1YAAEAAElEQVR4nOz962LrSI60jUYASMqr+...
+Full task response: {
+  "id": "b2c69e18-3d93-4b5c-8af4-421f8c526d40",
+  "status": "SUCCEEDED",
+  "createdAt": "2025-03-26T19:38:24.480Z",
+  "output": [
+    "https://dnznrvs05pmza.cloudfront.net/b9df535e-e7ba-4a2a-9c46-d8b7e27fa8d2.mp4?_jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrZXlIYXNoIjoiYTA0MjZhZWRkMDAxODMwZSIsImJ1Y2tldCI6InJ1bndheS10YXNrLWFydGlmYWN0cyIsInN0YWdlIjoicHJvZCIsImV4cCI6MTc0MzEyMDAwMH0.Ko8pdvME2kWopB5Vffxkz8uafSKQMaToTyl2fCUKYrA"
+  ]
+}
+Generated video URL: https://dnznrvs05pmza.cloudfront.net/b9df535e-e7ba-4a2a-9c46-d8b7e27fa8d2.mp4?_jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrZXlIYXNoIjoiYTA0MjZhZWRkMDAxODMwZSIsImJ1Y2tldCI6InJ1bndheS10YXNrLWFydGlmYWN0cyIsInN0YWdlIjoicHJvZCIsImV4cCI6MTc0MzEyMDAwMH0.Ko8pdvME2kWopB5Vffxkz8uafSKQMaToTyl2fCUKYrA
+Image uploaded and saved at: /home/mailitg/Documents/mirrormorphose/assets/image/input.jpg
+Fetched Image Size (in bytes): 909079
+Base64 String Length: 1212108
+Data URI (first 100 chars): data:image/jpeg;base64,iVBORw0KGgoAAAANSUhEUgAAA5gAAAZACAYAAAAcne1YAAEAAElEQVR4nOz962LrSI60jUYASMqr+...
+Full task response: {
+  "id": "16f31a61-8874-46d2-a63b-b2a96c6c7308",
+  "status": "SUCCEEDED",
+  "createdAt": "2025-03-26T20:39:40.339Z",
+  "output": [
+    "https://dnznrvs05pmza.cloudfront.net/b5b81f53-e4c6-46cf-97a9-5e8ffaf7281e.mp4?_jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrZXlIYXNoIjoiMjE1MTgzYTRlZjVlZWJlMiIsImJ1Y2tldCI6InJ1bndheS10YXNrLWFydGlmYWN0cyIsInN0YWdlIjoicHJvZCIsImV4cCI6MTc0MzEyMDAwMH0.kC_Lf4Os-mL9VycgmIcQKvivJzz3VwlEJIoQafc3zHM"
+  ]
+}
+Generated video URL: https://dnznrvs05pmza.cloudfront.net/b5b81f53-e4c6-46cf-97a9-5e8ffaf7281e.mp4?_jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrZXlIYXNoIjoiMjE1MTgzYTRlZjVlZWJlMiIsImJ1Y2tldCI6InJ1bndheS10YXNrLWFydGlmYWN0cyIsInN0YWdlIjoicHJvZCIsImV4cCI6MTc0MzEyMDAwMH0.kC_Lf4Os-mL9VycgmIcQKvivJzz3VwlEJIoQafc3zHM
+Image uploaded and saved at: /home/mailitg/Documents/mirrormorphose/assets/image/input.jpg
+Fetched Image Size (in bytes): 909079
+Base64 String Length: 1212108
+Data URI (first 100 chars): data:image/jpeg;base64,iVBORw0KGgoAAAANSUhEUgAAA5gAAAZACAYAAAAcne1YAAEAAElEQVR4nOz962LrSI60jUYASMqr+...
+Full task response: {
+  "id": "340eff19-ef97-4dc2-81ee-5af4a53b74b6",
+  "status": "SUCCEEDED",
+  "createdAt": "2025-03-26T20:45:00.155Z",
+  "output": [
+    "https://dnznrvs05pmza.cloudfront.net/c296360c-77c7-4dbe-a1c1-086a8b5ea6b8.mp4?_jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrZXlIYXNoIjoiNTJmZmQ3ODBjZmI2MDMyNyIsImJ1Y2tldCI6InJ1bndheS10YXNrLWFydGlmYWN0cyIsInN0YWdlIjoicHJvZCIsImV4cCI6MTc0MzEyMDAwMH0.XXDSZl3Pi6uZbDd7UuCg7RQeqK5Or2C9k13GXMj0-Yo"
+  ]
+}
+Generated video URL: https://dnznrvs05pmza.cloudfront.net/c296360c-77c7-4dbe-a1c1-086a8b5ea6b8.mp4?_jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrZXlIYXNoIjoiNTJmZmQ3ODBjZmI2MDMyNyIsImJ1Y2tldCI6InJ1bndheS10YXNrLWFydGlmYWN0cyIsInN0YWdlIjoicHJvZCIsImV4cCI6MTc0MzEyMDAwMH0.XXDSZl3Pi6uZbDd7UuCg7RQeqK5Or2C9k13GXMj0-Yo

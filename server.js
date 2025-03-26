@@ -62,7 +62,7 @@ app.post("/upload-image", upload.single("image"), async (req, res) => {
 
 app.post("/generate-video", async (req, res) => {
   try {
-    const response = await axios.get("http://raspberrypi.local:8000/get-child-img", {
+    const response = await axios.get("http://raspberrypi.local:8000/get_child_img", {
       responseType: "arraybuffer",
     });
 

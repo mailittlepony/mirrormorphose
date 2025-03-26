@@ -1,8 +1,9 @@
 <html lang="en">
     <head>
+        <base href='/'/>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Reflection</title>
+        <title>Reflection - OpenCV view</title>
     </head>
     <body>
         <button id="startButton">Start</button>
@@ -11,7 +12,8 @@
             <canvas id="canvasOutput" style="position: absolute; top: 0; left: 0;"></canvas>
         </div>
 
-        <script src="index.js" type="text/JavaScript"></script>
-        <script async src="opencv.js" onload="openCvReady();"></script>
+        <script src="js/facerecognition.js"></script>
+        <script async src="js/opencv.js" onload="openCvReady()"></script>
+        <script src="js/opencv_out.js"></script>
     </body>
 </html>

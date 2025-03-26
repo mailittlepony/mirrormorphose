@@ -6,6 +6,8 @@ let faceCascadeFile = 'haarcascade_frontalface_default.xml';
 let eyeCascadeFile = 'haarcascade_eye.xml';
 let streaming = false;
 
+let canvasOutput = null;
+
 let onHeadDetected = null;
 let onHeadPositionChange = null;
 let onEyeStateChange = null;
@@ -100,46 +102,45 @@ function processImage(img) {
         let roiGray = gray.roi(maxFace); // Region of interest in gray scale
         let roiSrc = src.roi(maxFace);   // Region of interest in original image
 
+        // Draw red rectangle around the detected face
+        let facePoint1 = new cv.Point(maxFace.x, maxFace.y);
+        let facePoint2 = new cv.Point(maxFace.x + maxFace.width, maxFace.y + maxFace.height);
+        cv.rectangle(src, facePoint1, facePoint2, [255, 0, 0, 255], 2);
+
         eyeClassifier.detectMultiScale(roiGray, eyes);
 
         // Filter eyes based on aspect ratio relative to the face's bounding box
         let validEyes = [];
         for (let i = 0; i < eyes.size(); ++i) {
             let eye = eyes.get(i);
-            // Calculate the aspect ratio of the eye compared to the face's width and height
             let aspectRatio = eye.width / eye.height;
             let eyeToFaceWidthRatio = eye.width / maxFace.width;
             let eyeToFaceHeightRatio = eye.height / maxFace.height;
+            let aspectRatioThreshold = 0.5;
+            let sizeThreshold = 0.1;
 
-            // Apply the aspect ratio threshold (adjust this threshold as necessary)
-            let aspectRatioThreshold = 0.2; // Adjust based on your requirements
-            let sizeThreshold = 0.05; // Threshold for minimum size relative to the face
-
-            if (aspectRatio > aspectRatioThreshold &&
-                eyeToFaceWidthRatio > sizeThreshold && 
-                eyeToFaceHeightRatio > sizeThreshold) {
+            if (aspectRatio > aspectRatioThreshold && eyeToFaceWidthRatio > sizeThreshold && eyeToFaceHeightRatio > sizeThreshold) {
                 validEyes.push(eye);
             }
         }
 
-        // Determine eyeState based on the number of valid eyes
-        let eyeState;
-        if (validEyes.length < 2) {
-            eyeState = "closed";
-        } else if (validEyes.length === 2) {
-            eyeState = "open";
+        // Draw blue rectangles around detected eyes
+        for (let i = 0; i < validEyes.length; i++) {
+            let eye = validEyes[i];
+            let eyePoint1 = new cv.Point(eye.x, eye.y);
+            let eyePoint2 = new cv.Point(eye.x + eye.width, eye.y + eye.height);
+            cv.rectangle(roiSrc, eyePoint1, eyePoint2, [0, 0, 255, 255], 2);
         }
 
-        // Call the onEyeStateChange callback when the eye state changes
+        let eyeState = validEyes.length < 2 ? "closed" : "open";
+
         if (this.prevEyeState !== undefined && this.prevEyeState !== eyeState) {
             if (onEyeStateChange) {
                 onEyeStateChange(eyeState);
             }
         }
 
-        // Store the current eye state for future comparison
         this.prevEyeState = eyeState;
-
         roiGray.delete();
         roiSrc.delete();
     } else {
@@ -149,9 +150,12 @@ function processImage(img) {
         this.prevHeadState = false;
     }
 
-    // Store that no head is detected in the current frame
     this.prevHeadCenterX = undefined;
     this.prevHeadCenterY = undefined;
+
+    if (canvasOutput) {
+        cv.imshow(canvasOutput, src);
+    }
 
     src.delete();
     gray.delete();

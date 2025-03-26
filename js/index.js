@@ -11,9 +11,50 @@ document.addEventListener("DOMContentLoaded", () => {
     const generateBtn = document.getElementById("generateBtn");
     const videoResult = document.getElementById("video-result");
     const videoContainer = document.getElementById("video-container");
-    const useTestVideo = true; // Set to false to use the API video
+    const useTestVideo = false; // Set to false to use the API video
     let firstFrameTrimmed = false;
 
+    let eyeStates = [];
+    const windowSize = 5; 
+
+    let eyeClosedTimer = null; 
+    const closedEyeThreshold = 1500;
+    let eyeStateChangeTime = null;
+
+    function movingAverage(newState) {
+        eyeStates.push(newState);
+        if (eyeStates.length > windowSize) {
+            eyeStates.shift();
+        }
+
+        const openCount = eyeStates.filter(state => state === "open").length;
+        return openCount > windowSize / 2 ? "open" : "closed";
+    }
+
+    function handleEyeState(state) {
+        const smoothedState = movingAverage(state);
+        console.log(`eyes ${smoothedState}`);
+
+        const currentTime = Date.now();
+
+        if (smoothedState === "open") {
+            if (eyeClosedTimer) {
+                clearTimeout(eyeClosedTimer);
+                eyeClosedTimer = null;
+            }
+            if (videoResult.paused) {
+                playVideo(); 
+            }
+            eyeStateChangeTime = currentTime; 
+        } else {
+            if (!eyeClosedTimer) {
+                eyeStateChangeTime = currentTime; 
+                eyeClosedTimer = setTimeout(() => {
+                    stopVideo();
+                }, closedEyeThreshold);
+            }
+        }
+    }
     imageInput.addEventListener("change", () => {
         if (imageInput.files[0]) {
             preview.style.cssText = "background-color: black; display: block; background-image: none;";
@@ -36,17 +77,13 @@ document.addEventListener("DOMContentLoaded", () => {
         setupVideoContainer();
 
         // Start OpenCV face and eye detection
-        onHeadDetected = (x, y) => { 
+        onHeadDetected = (x, y) => {
             console.log(`face detected: (${x}, ${y})`);
         };
 
         onEyeStateChange = (state) => { 
-            console.log(`eyes ${state}`);
-            if (state === "open") {
-                playVideo();
-            } else {
-                stopVideo();
-            }
+            handleEyeState(state);
+
         };
 
         console.log("start OpenCV detection");
@@ -160,4 +197,3 @@ document.addEventListener("DOMContentLoaded", () => {
         videoResult.onended = null;
     }
 });
-
