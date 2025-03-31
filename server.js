@@ -88,7 +88,7 @@ app.post("/generate-video", async (req, res) => {
     const imageToVideo = await client.imageToVideo.create({
       model: "gen3a_turbo",
       promptImage: dataUri,
-      promptText: "A young kid, around 10 years old, sits still. He maintains a serious expression and direct eye contact with the camera. The camera is completely still, with soft natural lighting. The kid nods slowly at the 3-second marks, blinks naturally, and occasionally tilts his head slightly, creating a natural and realistic effect. The video is 10 seconds long.",
+      promptText: "The camera is still, with natural lighting. Subject sits still and maintains a serious expression holding direct eye contact with the camera while blinking occasionally. Subject nods slowly at the 3-second marks and occasionally tilts his head slightly.",
       duration: 10,
     });
 

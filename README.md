@@ -41,11 +41,11 @@ When you put the tag to ```true``` it plays the test video for any video process
 
 ![demo_](./assets/readme/stream.gif)
 
-When you go to ```\stream.mjpg\``` you can see what the camera sees so that we can check if the mirroir is at the right distance of the participant.
+When you go to ```/stream.mjpg/``` you can see what the camera sees so that we can check if the mirroir is at the right distance of the participant.
 
 ![demo](./assets/readme/opencv.gif)
 
-With ```\pages\opencv_out``` you can see if the detection works well, to tune it a bit we added ratio calculations and a sort of moving average.
+With ```/pages/opencv_out.html``` you can see if the detection works well, to tune it a bit we added ratio calculations and a sort of moving average.
 
 ### Results
 
@@ -53,7 +53,8 @@ So first you apload a picture of yourself younger on the website.
 
 ![demo](./assets/readme/stan.png)
 
-Then it automatically removes the background and sends it to the API server. You can check if everything works well by going to ```\get_child_img\```.
+Then it automatically removes the background and sends it to the API server. You can check if everything works well by
+going to ```/get_child_img/```.
 
 ![demo](./assets/readme/bgrm.png)
 

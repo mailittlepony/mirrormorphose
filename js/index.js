@@ -18,7 +18,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const windowSize = 5; 
 
     let eyeClosedTimer = null; 
-    const closedEyeThreshold = 1500;
+    const closedEyeThreshold = 500;
     let eyeStateChangeTime = null;
 
     function movingAverage(newState) {
@@ -173,7 +173,7 @@ document.addEventListener("DOMContentLoaded", () => {
         firstFrameTrimmed = false;
         videoResult.currentTime = 0;
         videoResult.loop = false;
-        videoResult.style.cssText = "opacity: 1; transition: opacity 1s ease;";
+        videoResult.style.cssText = "opacity: 1; transition: opacity 7s ease;";
         videoResult.play();
 
         videoResult.onended = () => {
