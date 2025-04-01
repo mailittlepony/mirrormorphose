@@ -5,7 +5,6 @@ import socketserver
 from http import server
 from threading import Condition
 import os
-from backgroundremover.bg import remove
 from PIL import Image, ImageFilter
 from io import BytesIO
 import numpy as np

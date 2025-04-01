@@ -3,3 +3,5 @@ node_modules/
 .venv/
 .env
 assets/videos/test.mp4
+server.out
+node.out
